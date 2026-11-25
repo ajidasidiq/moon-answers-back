@@ -12,7 +12,7 @@
  * characters, well inside the 240-character gate.
  */
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const LINE =
   "You howl, you wish, you promise you'll change tomorrow. Four billion years of it — and not one of you has ever wished ME a good night.";
@@ -40,6 +40,10 @@ function main(): void {
 
   mkdirSync(OUT_DIR, { recursive: true });
   writeFileSync(OUT_FILE, text, "utf8");
+  // Read-back verification: what landed on disk is exactly the line.
+  if (readFileSync(OUT_FILE, "utf8") !== text) {
+    throw new Error("read-back mismatch: /output/entry.txt differs from the entry");
+  }
 }
 
 main();
